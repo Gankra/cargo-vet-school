@@ -1,5 +1,8 @@
 
 # cargo-vet audits file
 
-[audits]
+[[audits.linked-list]]
+who = "Aria Beingessner <a.beingessner@gmail.com>"
+criteria = "safe-to-deploy"
+version = "0.0.1"
 

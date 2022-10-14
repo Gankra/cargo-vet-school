@@ -67,6 +67,7 @@ name = "cargo-vet-school"
 version = "0.1.0"
 dependencies = [
  "clap",
+ "linked-list",
  "reqwest",
  "serde",
  "serde_json",
@@ -339,6 +340,12 @@ name = "libc"
 version = "0.2.135"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "68783febc7782c6c5cb401fbda4de5a9898be1762314da0bb2c10ced61f18b0c"
+
+[[package]]
+name = "linked-list"
+version = "0.0.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a4dacf969043dc69f1f731b5042eb05e030d264bcf34f2242889fcbdc7a65f06"
 
 [[package]]
 name = "log"
