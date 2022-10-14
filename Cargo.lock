@@ -69,7 +69,7 @@ dependencies = [
  "clap",
  "insta",
  "minidump",
- "minidump-common 0.10.4",
+ "minidump-common",
  "reqwest",
  "serde",
  "serde_json",
@@ -134,20 +134,11 @@ dependencies = [
 
 [[package]]
 name = "debugid"
-version = "0.7.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d6ee87af31d84ef885378aebca32be3d682b0e0dc119d5b4860a2c5bb5046730"
-dependencies = [
- "uuid 0.8.2",
-]
-
-[[package]]
-name = "debugid"
 version = "0.8.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "bef552e6f588e446098f6ba40d89ac146c8c7b64aade83c051ee00bb5d2bc18d"
 dependencies = [
- "uuid 1.2.1",
+ "uuid",
 ]
 
 [[package]]
@@ -513,53 +504,37 @@ checksum = "2a60c7ce501c71e03a9c9c0d35b861413ae925bd979cc7a4e30d060069aaac8d"
 
 [[package]]
 name = "minidump"
-version = "0.11.0"
+version = "0.12.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "fe66b009ea76a4727d61e386f6e6e353d373a963954c8fe5b93da650eab7db5d"
+checksum = "8da4b7fdfc068933c051797602c2c786d54b73d33f94323d9748da0b39ebbe47"
 dependencies = [
- "debugid 0.8.0",
+ "debugid",
  "encoding",
- "log",
  "memmap2",
- "minidump-common 0.11.0",
+ "minidump-common",
  "num-traits 0.2.15",
  "range-map",
  "scroll",
  "thiserror",
  "time",
- "uuid 1.2.1",
+ "tracing",
+ "uuid",
 ]
 
 [[package]]
 name = "minidump-common"
-version = "0.10.4"
+version = "0.12.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "190480ae87a21dc26a115c4ef5ce8c05c10074d55ea2042c472be7bf6dc6e592"
+checksum = "a134e10507b4352836be67e13cfa06e7881df5b4e091999e75c05eb449dc6985"
 dependencies = [
  "bitflags",
- "debugid 0.7.3",
+ "debugid",
  "enum-primitive-derive",
- "log",
  "num-traits 0.2.15",
  "range-map",
  "scroll",
  "smart-default",
-]
-
-[[package]]
-name = "minidump-common"
-version = "0.11.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a5f37f242baafb519413c7f12baa8e6854a176ea2f44910e2c434a428e27358d"
-dependencies = [
- "bitflags",
- "debugid 0.8.0",
- "enum-primitive-derive",
- "log",
- "num-traits 0.2.15",
- "range-map",
- "scroll",
- "smart-default",
+ "tracing",
 ]
 
 [[package]]
@@ -903,9 +878,9 @@ dependencies = [
 
 [[package]]
 name = "thin-vec"
-version = "0.2.8"
+version = "0.2.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "104c2cb3180b6fb6d5b2278768e9b88b578d32ba751ea6e8d026688a40d7ed87"
+checksum = "dcc760ada4a9f56fc6d0e81bd143984ebc7bb1b875a6891aa2fa613ca7394fc0"
 
 [[package]]
 name = "thiserror"
@@ -1007,8 +982,21 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "8ce8c33a8d48bd45d624a6e523445fd21ec13d3653cd51f681abf67418f54eb8"
 dependencies = [
  "cfg-if",
+ "log",
  "pin-project-lite",
+ "tracing-attributes",
  "tracing-core",
+]
+
+[[package]]
+name = "tracing-attributes"
+version = "0.1.23"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "4017f8f45139870ca7e672686113917c71c7a6e02d4924eda67186083c03081a"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn",
 ]
 
 [[package]]
@@ -1063,12 +1051,6 @@ dependencies = [
  "idna",
  "percent-encoding",
 ]
-
-[[package]]
-name = "uuid"
-version = "0.8.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "bc5cf98d8186244414c848017f0e2676b3fcb46807f6668a97dfe67359a3c4b7"
 
 [[package]]
 name = "uuid"
