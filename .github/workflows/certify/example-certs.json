@@ -1,0 +1,24 @@
+[
+    {
+      "who": "Aria Beingessner <a.beingessner@gmail.com>",
+      "package": "serde",
+      "version1": "1.0.0",
+      "notes": "Wow cool audit!",
+      "criteria": [
+        "safe-to-run"
+      ],
+      "dependency_criteria": []
+    },
+    {
+      "who": "Aria Beingessner <a.beingessner@gmail.com>",
+      "package": "serde_derive",
+      "version1": "1.1.0",
+      "version2": "1.2.0",
+      "notes": "Wow cool audit2!",
+      "criteria": [
+        "safe-to-deploy",
+        "safe-to-run"
+      ],
+      "dependency_criteria": []
+    }
+  ]
