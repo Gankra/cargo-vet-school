@@ -513,20 +513,20 @@ checksum = "2a60c7ce501c71e03a9c9c0d35b861413ae925bd979cc7a4e30d060069aaac8d"
 
 [[package]]
 name = "minidump"
-version = "0.11.0"
+version = "0.14.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "fe66b009ea76a4727d61e386f6e6e353d373a963954c8fe5b93da650eab7db5d"
+checksum = "d8cb3a9530388df2ec8118130d17f57939c1d17e900a20f88a9f68169ab20c3c"
 dependencies = [
  "debugid 0.8.0",
  "encoding",
- "log",
  "memmap2",
- "minidump-common 0.11.0",
+ "minidump-common 0.14.0",
  "num-traits 0.2.15",
  "range-map",
  "scroll",
  "thiserror",
  "time",
+ "tracing",
  "uuid 1.2.1",
 ]
 
@@ -548,18 +548,18 @@ dependencies = [
 
 [[package]]
 name = "minidump-common"
-version = "0.11.0"
+version = "0.14.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a5f37f242baafb519413c7f12baa8e6854a176ea2f44910e2c434a428e27358d"
+checksum = "97dbaf56dfe28d07e1fecffce410976774dcac1f0d7f6d797b437468e989e687"
 dependencies = [
  "bitflags",
  "debugid 0.8.0",
  "enum-primitive-derive",
- "log",
  "num-traits 0.2.15",
  "range-map",
  "scroll",
  "smart-default",
+ "tracing",
 ]
 
 [[package]]
@@ -1007,8 +1007,21 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "8ce8c33a8d48bd45d624a6e523445fd21ec13d3653cd51f681abf67418f54eb8"
 dependencies = [
  "cfg-if",
+ "log",
  "pin-project-lite",
+ "tracing-attributes",
  "tracing-core",
+]
+
+[[package]]
+name = "tracing-attributes"
+version = "0.1.23"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "4017f8f45139870ca7e672686113917c71c7a6e02d4924eda67186083c03081a"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn",
 ]
 
 [[package]]
