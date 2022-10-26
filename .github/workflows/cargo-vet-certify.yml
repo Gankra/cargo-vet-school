@@ -1,0 +1,59 @@
+name: Certify Dependencies
+on: 
+  push:
+    branches:
+    - main
+  # pull_request:
+jobs:
+  get-audits:
+    name: "Get Audits"
+    runs-on: ubuntu-latest
+    env:
+      EXAMPLE_AUDITS: ./.github/workflows/certify/example-certs.json
+    outputs:
+      audits: ${{ steps.fetch-audits.outputs.audits }}
+    steps:
+    - uses: actions/checkout@master
+    - id: fetch-audits
+      run: |
+        audits=$(cat ${{ env.EXAMPLE_AUDITS }} | jq -r '. | @base64')
+        echo $audits
+        echo "audits=$audits" >> $GITHUB_OUTPUT
+
+
+  cargo-vet-certify:
+    name: Vet Dependencies
+    needs: get-audits
+    runs-on: ubuntu-latest
+    env:
+      # Token required to submit comments on failed PRs
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      CARGO_VET_VERSION: 0.3.0
+      VET_FAILURE_SUBMIT_ENDPOINT: https://cargo-vet.axo.dev/api/webhooks/receive
+      VET_FAILURE_VIEW_ENDPOINT: https://cargo-vet.axo.dev/reports
+      VET_RESULTS_FILE: vet-results.json
+      VET_RESULTS_FILE_FINAL: vet-results-final.json
+    steps:
+    - name: Log Audits
+      run: |
+        echo "certifying with these audits:"
+        decoded=$(echo ${{ needs.get-audits.outputs.audits }} | base64 --decode)
+        echo $decoded
+    - uses: actions/checkout@master
+    - name: Install Rust
+      run: rustup update stable && rustup default stable
+    - uses: actions/cache@v2
+      with:
+        path: ${{ runner.tool_cache }}/cargo-vet
+        key: cargo-vet-bin-${{ env.CARGO_VET_VERSION }}
+    - name: Add the tool cache directory to the search path
+      run: echo "${{ runner.tool_cache }}/cargo-vet/bin" >> $GITHUB_PATH
+    - name: Ensure that the tool cache is populated with the cargo-vet binary
+      # run: cargo install --root ${{ runner.tool_cache }}/cargo-vet --version ${{ env.CARGO_VET_VERSION }} cargo-vet
+      # Currently patching in a fork
+      run: cargo install --root ${{ runner.tool_cache }}/cargo-vet --version ${{ env.CARGO_VET_VERSION }} --git https://github.com/Gankra/cargo-vet --branch bots cargo-vet
+    - name: Apply New Audits
+      uses: ./.github/workflows/certify
+      with:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        audits: ${{ needs.get-audits.outputs.audits }}
