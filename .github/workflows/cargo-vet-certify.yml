@@ -1,29 +1,17 @@
 name: Certify Dependencies
-on: 
-  push:
-    branches:
-    - main
+on:
+  workflow_dispatch:
+    inputs:
+      audits:
+        description: "a Base64-encoded JSON blob of the audits to certify"
+        required: true
+  # push:
+  #  branches:
+  #  - main
   # pull_request:
 jobs:
-  get-audits:
-    name: "Get Audits"
-    runs-on: ubuntu-latest
-    env:
-      EXAMPLE_AUDITS: ./.github/workflows/certify/example-certs.json
-    outputs:
-      audits: ${{ steps.fetch-audits.outputs.audits }}
-    steps:
-    - uses: actions/checkout@master
-    - id: fetch-audits
-      run: |
-        audits=$(cat ${{ env.EXAMPLE_AUDITS }} | jq -r '. | @base64')
-        echo $audits
-        echo "audits=$audits" >> $GITHUB_OUTPUT
-
-
   cargo-vet-certify:
     name: Vet Dependencies
-    needs: get-audits
     runs-on: ubuntu-latest
     env:
       # Token required to submit comments on failed PRs
@@ -56,4 +44,4 @@ jobs:
       uses: ./.github/workflows/certify
       with:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        audits: ${{ needs.get-audits.outputs.audits }}
+        audits: ${{ inputs.audits }}
