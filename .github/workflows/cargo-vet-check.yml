@@ -13,6 +13,7 @@ jobs:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         CARGO_VET_VERSION: 0.3.0
         VET_RESULTS_FILE: vet-results.json
+        PR_NUMBER_FILE: pr-number.txt
         ARTIFACTS_DIR: pr
       steps:
       - uses: actions/checkout@master
@@ -37,6 +38,10 @@ jobs:
       - if: ${{ failure() }}
         name: Log Failure
         run: cat ./pr/${{ env.VET_RESULTS_FILE }}
+      - if: ${{ failure() && github.event.pull_request.number }}
+        name: Save PR number
+        run: |
+          echo ${{ github.event.pull_request.number }} > ./${{ env.ARTIFACTS_DIR }}/${{ env.PR_NUMBER_FILE }}
       - if: ${{ failure() && github.event.pull_request.number }}
         # TODO: only do this if "Invoke cargo-vet" was the step that failed?
         # Is that guaranteed by all the previous steps not being gated on failure()?
