@@ -1,0 +1,80 @@
+name: Submit cargo vet failures to webapp
+
+# read-write repo token
+# access to secrets
+on:
+  workflow_run:
+    workflows: ["Vet Dependencies"]
+    types:
+      - completed
+
+jobs:
+  upload:
+    runs-on: ubuntu-latest
+    if: >
+      github.event.workflow_run.event == 'pull_request' &&
+      github.event.workflow_run.conclusion == 'failure'
+    env:
+      VET_FAILURE_SUBMIT_ENDPOINT: https://cargo-vet.axo.dev/api/webhooks/receive
+      VET_FAILURE_VIEW_ENDPOINT: https://cargo-vet.axo.dev/reports
+      VET_RESULTS_FILE: vet-results.json
+      PR_NUMBER_FILE: pr-number.txt
+      ARTIFACTS_DIR: pr
+    steps:
+      - name: 'Download artifact'
+        uses: actions/github-script@v3.1.0
+        with:
+          script: |
+            var artifacts = await github.actions.listWorkflowRunArtifacts({
+               owner: context.repo.owner,
+               repo: context.repo.repo,
+               run_id: ${{github.event.workflow_run.id }},
+            });
+            var matchArtifact = artifacts.data.artifacts.filter((artifact) => {
+              return artifact.name == ${{ env.ARTIFACTS_DIR }}
+            })[0];
+            var download = await github.actions.downloadArtifact({
+               owner: context.repo.owner,
+               repo: context.repo.repo,
+               artifact_id: matchArtifact.id,
+               archive_format: 'zip',
+            });
+            var fs = require('fs');
+            fs.writeFileSync('${{github.workspace}}/${{ env.ARTIFACTS_DIR }}.zip', Buffer.from(download.data));
+      - run: unzip ${{ env.ARTIFACTS_DIR }}.zip
+
+      - name: 'Submit failure'
+        uses: actions/github-script@v3
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            var fs = require('fs');
+            const axios = require('axios');
+            var pr = Number(fs.readFileSync('./${{ env.PR_NUMBER_FILE }}'));
+            var report = JSON.parse(fs.readFileSync('./${{ env.VET_RESULTS_FILE }}'));
+            
+            // Add extra metadata
+            report.repo = "${{ github.event.workflow_run.head_repository.full_name }}";
+            report.pr = pr;
+            
+            // Submit to webapp
+            const submit_url = "${{ env.VET_FAILURE_SUBMIT_ENDPOINT }}";
+            console.log(`sending failure to: ${submit_url}`);
+            const response = await axios.post(submit_url, report);
+            
+            // Post comment
+            const id = response.id;
+            const view_url = `${{ env.VET_FAILURE_VIEW_ENDPOINT }}/${id}`;
+            
+            console.log(`view url: ${view_url}`);
+            
+            await github.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issue_number,
+              body: `cargo-vet needs you to audit your dependencies, visit ${view_url}`
+            });
+            
+            
+            
+            
