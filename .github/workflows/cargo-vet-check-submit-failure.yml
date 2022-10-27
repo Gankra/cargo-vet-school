@@ -66,20 +66,21 @@ jobs:
               url: url,
               method: "post",
               data: report
-              
             });
+            console.log("response:");
+            console.log(response);
             
             // Post comment
-            const id = response.id;
-            const view_url = `${{ env.VET_FAILURE_VIEW_ENDPOINT }}/${id}`;
+            const id = response.data.id;
+            const viewUrl = `${{ env.VET_FAILURE_VIEW_ENDPOINT }}/${id}`;
             
-            console.log(`view url: ${view_url}`);
+            console.log(`view url: ${viewUrl}`);
             
             await github.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              issue_number: issue_number,
-              body: `cargo-vet needs you to audit your dependencies, visit ${view_url}`
+              issue_number: pr,
+              body: `cargo-vet needs you to audit your dependencies, visit ${viewUrl}`
             });
             
             
