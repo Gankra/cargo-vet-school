@@ -24,8 +24,6 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: 14
-      - run: npm ci
-      # or one-off:
       - run: npm install axios
       - name: 'Download artifact'
         uses: actions/github-script@v3.1.0
