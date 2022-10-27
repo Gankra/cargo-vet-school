@@ -15,7 +15,7 @@ jobs:
       github.event.workflow_run.event == 'pull_request' &&
       github.event.workflow_run.conclusion == 'failure'
     env:
-      VET_FAILURE_SUBMIT_APP: https://cargo-vet.axo.dev/api
+      VET_FAILURE_SUBMIT_APP: https://cargo-vet.axo.dev/api/
       VET_FAILURE_SUBMIT_ENDPOINT: webhooks/receive
       VET_FAILURE_VIEW_ENDPOINT: https://cargo-vet.axo.dev/reports
       VET_RESULTS_FILE: vet-results.json
@@ -60,7 +60,7 @@ jobs:
             // Submit to webapp
             const baseUrl = "${{ env.VET_FAILURE_SUBMIT_APP }}";
             const url = "${{ env.VET_FAILURE_SUBMIT_ENDPOINT }}";
-            console.log(`sending failure to: ${baseUrl}/${url}`);
+            console.log(`sending failure to: ${baseUrl}${url}`);
             const response = await github.request({
               baseUrl: baseUrl,
               url: url,
