@@ -12,10 +12,8 @@ jobs:
         # Token required to submit comments on failed PRs
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         CARGO_VET_VERSION: 0.3.0
-        VET_FAILURE_SUBMIT_ENDPOINT: https://cargo-vet.axo.dev/api/webhooks/receive
-        VET_FAILURE_VIEW_ENDPOINT: https://cargo-vet.axo.dev/reports
         VET_RESULTS_FILE: vet-results.json
-        VET_RESULTS_FILE_FINAL: vet-results-final.json
+        ARTIFACTS_DIR: pr
       steps:
       - uses: actions/checkout@master
       - name: Install Rust
@@ -33,39 +31,20 @@ jobs:
       - name: Invoke cargo-vet
         # Currently emitting a custom output
         run: |
-          cargo vet --locked --output-format=json-full > ${{ env.VET_RESULTS_FILE }}
-          # run: cargo vet --locked --output-format=json > ${{ env.VET_RESULTS_FILE }}
+          mkdir -p ./${{ env.ARTIFACTS_DIR }}
+          cargo vet --locked --output-format=json-full > ./${{ env.ARTIFACTS_DIR }}/${{ env.VET_RESULTS_FILE }}
+          # run: cargo vet --locked --output-format=json > ./${{ env.ARTIFACTS_DIR }}/${{ env.VET_RESULTS_FILE }}
       - if: ${{ failure() }}
         name: Log Failure
-        run: cat ${{ env.VET_RESULTS_FILE }}
+        run: cat ./pr/${{ env.VET_RESULTS_FILE }}
       - if: ${{ failure() && github.event.pull_request.number }}
-        name: Report PR Failure
         # TODO: only do this if "Invoke cargo-vet" was the step that failed?
         # Is that guaranteed by all the previous steps not being gated on failure()?
         # Or will any of their failures "fall through" to this one?
-        run: |
-          # Parse out the repo fragment from the full "git://github.com/$FRAGMENT.git"
-          repo=$(echo ${{ github.repositoryUrl }} | sed s,git://github.com/,, | sed s,.git,,)
-          echo "repo = $repo"
-          
-          # Add the repo and PR number to vet's json
-          cat ${{ env.VET_RESULTS_FILE }} | jq --arg repo $repo --arg pr ${{ github.event.pull_request.number }} '. + {repo: $repo, pr: $pr}' > ${{ env.VET_RESULTS_FILE_FINAL }}
-          cat ${{ env.VET_RESULTS_FILE_FINAL }}
-          
-          # POST this JSON to cargo
-          response=$(cat ${{ env.VET_RESULTS_FILE_FINAL }} | curl -X POST --data @- ${{ env.VET_FAILURE_SUBMIT_ENDPOINT }})
-          echo "resp = $response"
-          
-          # Grab the ID from the response and construct the new URL
-          id=$(echo $response | jq -r '.id')
-          view_url="${{ env.VET_FAILURE_VIEW_ENDPOINT }}/$id"
-          echo "view_url = $view_url"
-          
-          # Post a github comment
-          message="cargo-vet needs you to audit your dependencies, visit $view_url"
-          echo "posting comment:"
-          echo $message | gh pr comment ${{ github.event.pull_request.number }} --body-file -
-
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ env.ARTIFACTS_DIR }}
+          path: ${{ env.ARTIFACTS_DIR }}/
 
           
 
