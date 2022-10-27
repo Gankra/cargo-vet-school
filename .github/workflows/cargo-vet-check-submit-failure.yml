@@ -52,7 +52,7 @@ jobs:
             var fs = require('fs');
             var report = JSON.parse(fs.readFileSync('./${{ env.VET_RESULTS_FILE }}'));
             const pr = Number(fs.readFileSync('./${{ env.PR_NUMBER_FILE }}'));
-            const repo = "${{ github.repository.full_name }}";
+            const repo = "${{ github.event.repository.full_name }}";
             const head_repo = "${{ github.event.workflow_run.head_repository.full_name }}";
             
             console.log(`pr #: ${pr}`);
@@ -83,12 +83,14 @@ jobs:
             
             console.log(`view url: ${viewUrl}`);
             
-            await github.issues.createComment({
+            const comment = await github.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: pr,
               body: `cargo-vet needs you to audit your dependencies, visit ${viewUrl}`
             });
+            
+            console.log(`comment: ${comment}`);
             
             
             
