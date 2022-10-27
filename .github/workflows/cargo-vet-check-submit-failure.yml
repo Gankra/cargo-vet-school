@@ -49,7 +49,7 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             var fs = require('fs');
-            const axios = require('axios');
+            const axios = require('.github/workflows/certify/node_modules/axios');
             var pr = Number(fs.readFileSync('./${{ env.PR_NUMBER_FILE }}'));
             var report = JSON.parse(fs.readFileSync('./${{ env.VET_RESULTS_FILE }}'));
             
