@@ -21,6 +21,12 @@ jobs:
       PR_NUMBER_FILE: pr-number.txt
       ARTIFACTS_DIR: pr
     steps:
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 14
+      - run: npm ci
+      # or one-off:
+      - run: npm install axios
       - name: 'Download artifact'
         uses: actions/github-script@v3.1.0
         with:
@@ -49,7 +55,7 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             var fs = require('fs');
-            const axios = require('.github/workflows/certify/node_modules/axios');
+            const axios = require('axios');
             var pr = Number(fs.readFileSync('./${{ env.PR_NUMBER_FILE }}'));
             var report = JSON.parse(fs.readFileSync('./${{ env.VET_RESULTS_FILE }}'));
             
