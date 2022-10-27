@@ -15,8 +15,8 @@ jobs:
       github.event.workflow_run.event == 'pull_request' &&
       github.event.workflow_run.conclusion == 'failure'
     env:
-      VET_FAILURE_SUBMIT_APP: https://cargo-vet.axo.dev/
-      VET_FAILURE_SUBMIT_ENDPOINT: /api/webhooks/receive
+      VET_FAILURE_SUBMIT_APP: https://cargo-vet.axo.dev/api
+      VET_FAILURE_SUBMIT_ENDPOINT: webhooks/receive
       VET_FAILURE_VIEW_ENDPOINT: https://cargo-vet.axo.dev/reports
       VET_RESULTS_FILE: vet-results.json
       PR_NUMBER_FILE: pr-number.txt
