@@ -60,7 +60,7 @@ jobs:
             // Submit to webapp
             const baseUrl = "${{ env.VET_FAILURE_SUBMIT_APP }}";
             const url = "${{ env.VET_FAILURE_SUBMIT_ENDPOINT }}";
-            console.log(`sending failure to: ${submit_url}`);
+            console.log(`sending failure to: ${baseUrl}/${url}`);
             const response = await github.request({
               baseUrl: baseUrl,
               url: url,
