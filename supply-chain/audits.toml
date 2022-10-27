@@ -21,8 +21,23 @@ implies = ["safe-to-run", "too-big-to-fail"]
 [criteria.too-big-to-fail]
 description-url = "https://gist.githubusercontent.com/Gankra/9dfbe4d131d82f659b363374e71bd03a/raw/c9f74a939a6767c25d197fe58ac42ec0244edf80/too-big-to-fail.txt"
 
+[[audits.minidump]]
+who = "Aria Beingessner <a.beingessner@gmail.com>"
+criteria = "safe-to-deploy"
+delta = "0.11.0 -> 0.12.0"
+
 [[audits.minidump-common]]
 who = "Aria Beingessner <a.beingessner@gmail.com>"
 criteria = "safe-to-deploy"
 version = "0.9.0"
+
+[[audits.minidump-common]]
+who = "Aria Beingessner <a.beingessner@gmail.com>"
+criteria = ["safe-to-deploy", "too-big-to-fail"]
+delta = "0.10.4 -> 0.12.0"
+
+[[audits.thin-vec]]
+who = "Aria Beingessner <a.beingessner@gmail.com>"
+criteria = "legalese-audit"
+delta = "0.2.8 -> 0.2.1"
 
