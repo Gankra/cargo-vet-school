@@ -50,11 +50,18 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             var fs = require('fs');
-            var pr = Number(fs.readFileSync('./${{ env.PR_NUMBER_FILE }}'));
             var report = JSON.parse(fs.readFileSync('./${{ env.VET_RESULTS_FILE }}'));
+            const pr = Number(fs.readFileSync('./${{ env.PR_NUMBER_FILE }}'));
+            const repo = "${{ github.repository.full_name }}";
+            const head_repo = "${{ github.event.workflow_run.head_repository.full_name }}";
+            
+            console.log(`pr #: ${pr}`);
+            console.log(`repo: ${repo}`);
+            console.log(`head_repo: ${head_repo}`);
             
             // Add extra metadata
-            report.repo = "${{ github.event.workflow_run.head_repository.full_name }}";
+            report.repo = repo;
+            report.head_repo = head_repo;
             report.pr = pr;
             
             // Submit to webapp
