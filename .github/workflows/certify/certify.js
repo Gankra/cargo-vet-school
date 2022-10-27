@@ -34,7 +34,7 @@ const main = async () => {
       for (const criteria of cert.criteria) {
           args.push("--criteria",  criteria);
       }
-      if (dependency_criteria) {
+      if (cert.dependency_criteria) {
         for (const dependency_criteria of cert.dependency_criteria) {
             console.log("dependency_criteria not yet supported!");
         }
