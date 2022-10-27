@@ -11,7 +11,7 @@ on:
   # pull_request:
 jobs:
   cargo-vet-certify:
-    name: Vet Dependencies
+    name: Apply Audits
     runs-on: ubuntu-latest
     env:
       # Token required to submit comments on failed PRs
