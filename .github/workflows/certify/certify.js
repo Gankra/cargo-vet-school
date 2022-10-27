@@ -41,13 +41,18 @@ const main = async () => {
       }
 
       args.push("--who", cert.who);
-      args.push("--notes", cert.notes);
+      if (cert.notes) {
+        args.push("--notes", cert.notes);
+      }
+      
       // No prompts, the author already signed off!
       args.push("--accept-all");
       // Don't bother checking if the package/version makes sense?
       args.push("--force");
+      // Don't update the crates index or imports
+      args.push("--locked");
 
-      // Now add the position package/version info
+      // Now add the positional package/version info
       args.push(cert.package);
       args.push(cert.version1);
       if (cert.version2) {
@@ -56,16 +61,18 @@ const main = async () => {
 
       await exec.exec(cmd, args);
     }
+    console.log("certified!");
 
-    
     // Print out the result
     await exec.exec("git", "diff");
-        
+    
     // Now create a commit!
+    console.log("committing and pushing...");
     await exec.exec("git", ["config", "--local", "user.name", "github-actions[bot]"]);
     await exec.exec("git", ["config", "--local", "user.email", "github-actions[bot]@users.noreply.github.com"]);
     await exec.exec("git", ["commit", "-am", "[cargo-vet] add new audits"]);
     await exec.exec("git", ["push"]);
+    console.log("pushed!");
   } catch (error) {
     core.setFailed(error.message);
   }
