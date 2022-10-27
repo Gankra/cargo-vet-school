@@ -60,10 +60,6 @@ const main = async () => {
     
     // Print out the result
     await exec.exec("git", "diff");
-            git config --local user.name 'github-actions[bot]'
-        git config --local user.email 'github-actions[bot]@users.noreply.github.com'
-        git commit -am "make an even better README"
-        git push
         
     // Now create a commit!
     await exec.exec("git", ["config", "--local", "user.name", "github-actions[bot]"]);
