@@ -34,8 +34,10 @@ const main = async () => {
       for (const criteria of cert.criteria) {
           args.push("--criteria",  criteria);
       }
-      for (const dependency_criteria of cert.dependency_criteria) {
-          console.log("dependency_criteria not yet supported!");
+      if (dependency_criteria) {
+        for (const dependency_criteria of cert.dependency_criteria) {
+            console.log("dependency_criteria not yet supported!");
+        }
       }
 
       args.push("--who", cert.who);
@@ -55,26 +57,19 @@ const main = async () => {
       await exec.exec(cmd, args);
     }
 
-    // Now create a commit!
-    /*
-    await octokit.issues.createComment({
-      ...context.repo,
-      issue_number: pull_request.number,
-      body: 'Thank you for submitting a pull request! We will try to review this as soon as we can.'
-    });
-    */
-
-    /*
-    octokit.rest.git.createCommit({
-          owner,
-      repo,
-      message,
-      tree,
-      author.name,
-      author.email
-      })
-    */
+    
+    // Print out the result
     await exec.exec("git", "diff");
+            git config --local user.name 'github-actions[bot]'
+        git config --local user.email 'github-actions[bot]@users.noreply.github.com'
+        git commit -am "make an even better README"
+        git push
+        
+    // Now create a commit!
+    await exec.exec("git", ["config", "--local", "user.name", "github-actions[bot]"]);
+    await exec.exec("git", ["config", "--local", "user.email", "github-actions[bot]@users.noreply.github.com"]);
+    await exec.exec("git", ["commit", "-am", "[cargo-vet] add new audits"]);
+    await exec.exec("git", ["push"]);
   } catch (error) {
     core.setFailed(error.message);
   }
