@@ -513,20 +513,20 @@ checksum = "2a60c7ce501c71e03a9c9c0d35b861413ae925bd979cc7a4e30d060069aaac8d"
 
 [[package]]
 name = "minidump"
-version = "0.11.0"
+version = "0.15.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "fe66b009ea76a4727d61e386f6e6e353d373a963954c8fe5b93da650eab7db5d"
+checksum = "94e5cd2ca4f6b85c6c7fb41ae0aebe0b443a6c0558876f1d779c7236d42417cf"
 dependencies = [
  "debugid 0.8.0",
  "encoding",
- "log",
  "memmap2",
- "minidump-common 0.11.0",
+ "minidump-common 0.15.2",
  "num-traits 0.2.15",
- "range-map",
+ "range-map 0.2.0",
  "scroll",
  "thiserror",
  "time",
+ "tracing",
  "uuid 1.2.1",
 ]
 
@@ -541,23 +541,22 @@ dependencies = [
  "enum-primitive-derive",
  "log",
  "num-traits 0.2.15",
- "range-map",
+ "range-map 0.1.5",
  "scroll",
  "smart-default",
 ]
 
 [[package]]
 name = "minidump-common"
-version = "0.11.0"
+version = "0.15.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a5f37f242baafb519413c7f12baa8e6854a176ea2f44910e2c434a428e27358d"
+checksum = "694717103b2c15f8c16ddfaec1333fe15673bc22b10ffa6164427415701974ba"
 dependencies = [
  "bitflags",
  "debugid 0.8.0",
  "enum-primitive-derive",
- "log",
  "num-traits 0.2.15",
- "range-map",
+ "range-map 0.2.0",
  "scroll",
  "smart-default",
 ]
@@ -599,15 +598,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "578ede34cf02f8924ab9447f50c28075b4d3e5b269972345e7e0372b38c6cdcd"
 dependencies = [
  "autocfg",
-]
-
-[[package]]
-name = "num_threads"
-version = "0.1.6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "2819ce041d2ee131036f4fc9d6ae7ae125a3a40e97ba64d04fe799ad9dabbb44"
-dependencies = [
- "libc",
 ]
 
 [[package]]
@@ -665,6 +655,15 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "87dc8ff3b0f3e32dbba6e49c592c0191a3a2cabbf6f7e5a78e1010050b9a42e1"
 dependencies = [
  "num-traits 0.1.43",
+]
+
+[[package]]
+name = "range-map"
+version = "0.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "12a5a2d6c7039059af621472a4389be1215a816df61aa4d531cfe85264aee95f"
+dependencies = [
+ "num-traits 0.2.15",
 ]
 
 [[package]]
@@ -929,13 +928,29 @@ dependencies = [
 
 [[package]]
 name = "time"
-version = "0.3.15"
+version = "0.3.17"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d634a985c4d4238ec39cacaed2e7ae552fbd3c476b552c1deac3021b7d7eaf0c"
+checksum = "a561bf4617eebd33bca6434b988f39ed798e527f51a1e797d0ee4f61c0a38376"
 dependencies = [
  "itoa",
- "libc",
- "num_threads",
+ "serde",
+ "time-core",
+ "time-macros",
+]
+
+[[package]]
+name = "time-core"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "2e153e1f1acaef8acc537e68b44906d2db6436e2b35ac2c6b42640fff91f00fd"
+
+[[package]]
+name = "time-macros"
+version = "0.2.6"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d967f99f534ca7e495c575c62638eebc2898a8c84c119b89e250477bc4ba16b2"
+dependencies = [
+ "time-core",
 ]
 
 [[package]]
@@ -1007,8 +1022,21 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "8ce8c33a8d48bd45d624a6e523445fd21ec13d3653cd51f681abf67418f54eb8"
 dependencies = [
  "cfg-if",
+ "log",
  "pin-project-lite",
+ "tracing-attributes",
  "tracing-core",
+]
+
+[[package]]
+name = "tracing-attributes"
+version = "0.1.23"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "4017f8f45139870ca7e672686113917c71c7a6e02d4924eda67186083c03081a"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn",
 ]
 
 [[package]]
